@@ -159,7 +159,7 @@ func (s *Server) Start() error {
 			handleUpdate := func(update *Update) {
 				switch {
 				case update.Message != nil:
-					s.handleMessage(update.Message)
+					s.handleMessage(update.Message) 
 				case update.EditedMessage != nil:
 					s.editMessageHandler(update.EditedMessage)
 				case update.ChannelPost != nil:
@@ -353,5 +353,9 @@ func (s *Server) handleMessage(msg *Message) {
 			handler.f(msg)
 			return
 		}
+	}
+	for _, handlerAuto := range s.messageHandlersAuto {
+		handlerAuto.f(msg)
+		return
 	}
 }
