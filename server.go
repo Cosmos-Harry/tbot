@@ -29,6 +29,7 @@ type Server struct {
 	nextOffset    int
 
 	messageHandlers        []messageHandler
+	messageHandlersAuto    []messageHandlerAuto
 	editMessageHandler     handlerFunc
 	channelPostHandler     handlerFunc
 	editChannelPostHandler handlerFunc
@@ -57,6 +58,10 @@ type handlerFunc func(*Message)
 type messageHandler struct {
 	rx *regexp.Regexp
 	f  handlerFunc
+}
+
+type messageHandlerAuto struct {
+	f handlerFunc
 }
 
 /*
@@ -136,7 +141,7 @@ func (s *Server) Use(m Middleware, handler func(*Message)) {
 		// Trigger the desired action
 		s.HandleMessageAuto(handler)
 
-	} 
+	}
 }
 
 // Start listening for updates
@@ -289,7 +294,7 @@ func (s *Server) HandleMessage(pattern string, handler func(*Message)) {
 }
 func (s *Server) HandleMessageAuto(handler func(*Message)) {
 
-	s.messageHandlers = append(s.messageHandlers, messageHandler{rx: nil, f: handler})
+	s.messageHandlersAuto = append(s.messageHandlersAuto, messageHandlerAuto{f: handler})
 }
 
 // HandleEditedMessage set handler for incoming edited messages
