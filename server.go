@@ -61,6 +61,7 @@ type messageHandler struct {
 
 /*
 New creates new Server. Available options:
+
 	WithWebhook(url, addr string)
 	WithHTTPClient(client *http.Client)
 	WithBaseURL(baseURL string)
@@ -125,8 +126,17 @@ func WithLogger(logger Logger) ServerOption {
 }
 
 // Use adds middleware to server
-func (s *Server) Use(m Middleware) {
+func (s *Server) Use(m Middleware, handler func(*Message)) {
+	oldMiddlewares := s.middlewares
 	s.middlewares = append(s.middlewares, m)
+	newMiddlewares := s.middlewares
+
+	// Check if a new m was appended
+	if len(newMiddlewares) > len(oldMiddlewares) {
+		// Trigger the desired action
+		s.HandleMessageAuto(handler)
+
+	}
 }
 
 // Start listening for updates
@@ -276,6 +286,10 @@ func (s *Server) longPoolUpdates() (chan *Update, error) {
 func (s *Server) HandleMessage(pattern string, handler func(*Message)) {
 	rx := regexp.MustCompile(pattern)
 	s.messageHandlers = append(s.messageHandlers, messageHandler{rx: rx, f: handler})
+}
+func (s *Server) HandleMessageAuto(handler func(*Message)) {
+
+	s.messageHandlers = append(s.messageHandlers, messageHandler{rx: nil, f: handler})
 }
 
 // HandleEditedMessage set handler for incoming edited messages
