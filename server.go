@@ -136,7 +136,7 @@ func (s *Server) Use(m Middleware, handler func(*Message)) {
 		// Trigger the desired action
 		s.HandleMessageAuto(handler)
 
-	}
+	} 
 }
 
 // Start listening for updates
