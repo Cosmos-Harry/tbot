@@ -1,3 +1,3 @@
-module github.com/Cosmos-Harry/tbot/v2
+module github.com/Cosmos-Harry/tbot
 
 go 1.12
