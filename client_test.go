@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Cosmos-Harry/tbot/v2"
+	"github.com/Cosmos-Harry/tbot"
 )
 
 const token = "TOKEN"
