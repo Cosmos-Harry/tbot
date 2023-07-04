@@ -139,6 +139,7 @@ func (s *Server) Use(m Middleware, handler func(*Message)) {
 	// Check if a new m was appended
 	if len(newMiddlewares) > len(oldMiddlewares) {
 		// Trigger the desired action
+		fmt.Println("Update success")
 		s.HandleMessageAuto(handler)
 
 	}
